@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../styles/styles2.css" />
+  </head>
+  <body>
+    <!-- Header -->
+    <header>
+      <div class="header-content">
+        <h1>DATA FUSION</h1>
+      </div>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <nav class="tabs">
+      <a href="home">Home</a>
+      <a href="datasource">Data Sources</a>
+      <a href="#" class="active">Access Links</a>
+      <a href="logs">Logs</a>
+      <a href="test-connection">Test Connection</a>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+      <section class="content">
+        <!-- Virtual Databases Section -->
+        <div class="virtual-databases">
+          <h2>Access Links</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>VDB Name</th>
+                <th>Version</th>
+                <th>Teiid JDBC URL</th>
+                <th>Dynamic</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Example Row -->
+              <tr>
+                <td>DSDataTransfer</td>
+                <td>1</td>
+                <td>jdbc:teiid:DSDataTransfer@mm...</td>
+                <td>true</td>
+                <td>ACTIVE</td>
+                <td>
+                  <a href="#">Delete</a> | <a href="#">Details</a> |
+                  <a href="#">Download</a> |
+                  <a href="#">Undeploy</a>
+                </td>
+              </tr>
+              <tr>
+                <td>OpenWorks_LSSE2E_SingleSource</td>
+                <td>5000.10.7</td>
+                <td>jdbc:teiid:OpenWorks_LSSE2E_SingleSource@mm...</td>
+                <td>true</td>
+                <td>ACTIVE</td>
+                <td>
+                  <a href="#">Delete</a> | <a href="#">Details</a> |
+                  <a href="#">Download</a> |
+                  <a href="#">Undeploy</a>
+                </td>
+              </tr>
+              <tr>
+                <td>OpenWorksCommonModel_LSSE2E</td>
+                <td>5000.10.7</td>
+                <td>jdbc:teiid:OpenWorksCommonModel_LSSE2E@mm...</td>
+                <td>false</td>
+                <td>ACTIVE</td>
+                <td>
+                  <a href="#">Delete</a> | <a href="#">Details</a> |
+                  <a href="#">Download</a> |
+                  <a href="#">Undeploy</a>
+                </td>
+              </tr>
+              <tr>
+                <td>pg_pg</td>
+                <td>1</td>
+                <td>jdbc:teiid:pg_pg@mm...</td>
+                <td>true</td>
+                <td>ACTIVE</td>
+                <td>
+                  <a href="#">Delete</a> | <a href="#">Details</a> |
+                  <a href="#">Download</a> |
+                  <a href="#">Undeploy</a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>
