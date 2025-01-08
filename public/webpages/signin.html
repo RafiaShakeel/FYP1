@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign In</title>
+    <link rel="stylesheet" href="../styles/styles.css" />
+    <!-- Load the Google API Client Library -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+  </head>
+  <body>
+    <nav>
+      <div class="logo"><a href="index.html">Data Fusion</a></div>
+      <ul>
+        <li><a href="#team">Team</a></li>
+        <li><a href="#about">About Us</a></li>
+        <li><a href="sign-in">Sign In</a></li>
+        <li><a href="sign-up">Sign Up</a></li>
+      </ul>
+    </nav>
+    <div class="parentcontainer">
+      <div class="container">
+        <div class="logo-section">
+          <img src="../images/logoDFS.jpg" alt="Data Fusion Logo" />
+          <p>
+            Welcome to Data Fusion! A platform to unify and transform your data
+            seamlessly.
+          </p>
+        </div>
+        <div class="form-container">
+          <h2>Sign In</h2>
+          <form id="signInForm">
+            <label for="email">Email:</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              placeholder="Your Email"
+            />
+            <label for="password">Password:</label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              placeholder="Your Password"
+            />
+            <button type="submit">Sign In</button>
+          </form>
+          <!-- Google Login Button -->
+          <button id="loginButton">Login with Google</button>
+          <div id="userInfo"></div>
+        </div>
+      </div>
+    </div>
+    <script>
+      // Google OAuth Configuration
+      const clientId =
+        "385006182436-lhpqj494m9snj1ifla9lguc59lnjcmcq.apps.googleusercontent.com";
+      const redirectUri = "http://localhost:3000/home/"; // Replace with your redirect URI
+      const authEndpoint = "https://accounts.google.com/o/oauth2/v2/auth";
+      const tokenEndpoint = "https://oauth2.googleapis.com/token";
+
+      // Add event listener to "Login with Google" button
+      document
+        .getElementById("loginButton")
+        .addEventListener("click", async (e) => {
+          e.preventDefault(); // Prevent default form submission
+
+          const codeVerifier = generateCodeVerifier();
+          const codeChallenge = await generateCodeChallenge(codeVerifier);
+
+          // Save the code verifier in local storage for later use
+          localStorage.setItem("code_verifier", codeVerifier);
+
+          // Construct the Google OAuth URL
+          const authUrl = `${authEndpoint}?response_type=code&client_id=${clientId}&redirect_uri=${encodeURIComponent(
+            redirectUri
+          )}&scope=email%20profile&code_challenge=${codeChallenge}&code_challenge_method=S256`;
+
+          // Redirect the user to Google's OAuth endpoint
+          window.location.href = authUrl;
+        });
+
+      // Check if redirected back with an authorization code
+      const params = new URLSearchParams(window.location.search);
+      if (params.has("code")) {
+        const code = params.get("code");
+        const codeVerifier = localStorage.getItem("code_verifier");
+
+        // Exchange the authorization code for tokens
+        exchangeCodeForToken(code, codeVerifier);
+      }
+
+      // Generate a random code verifier
+      function generateCodeVerifier() {
+        const array = new Uint8Array(56);
+        window.crypto.getRandomValues(array);
+        return btoa(String.fromCharCode(...array))
+          .replace(/\+/g, "-")
+          .replace(/\//g, "_")
+          .replace(/=+$/, "");
+      }
+
+      // Generate a code challenge based on the code verifier
+      async function generateCodeChallenge(verifier) {
+        const encoder = new TextEncoder();
+        const data = encoder.encode(verifier);
+        const hash = await crypto.subtle.digest("SHA-256", data);
+
+        return btoa(String.fromCharCode(...new Uint8Array(hash)))
+          .replace(/\+/g, "-")
+          .replace(/\//g, "_")
+          .replace(/=+$/, "");
+      }
+
+      // Exchange the authorization code for access and ID tokens
+      async function exchangeCodeForToken(code, codeVerifier) {
+        try {
+          const response = await fetch(tokenEndpoint, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: new URLSearchParams({
+              code: code,
+              client_id: clientId,
+              redirect_uri: redirectUri,
+              grant_type: "authorization_code",
+              code_verifier: codeVerifier,
+            }),
+          });
+
+          if (!response.ok) {
+            throw new Error("Token exchange failed");
+          }
+
+          const data = await response.json();
+          console.log("ID Token:", data.id_token); // Log the ID token to the console
+
+          // Redirect the user to index2.html
+          window.location.href = "http://localhost:3000/home/"; // Manually use the full path
+        } catch (error) {
+          console.error("Error exchanging code for token:", error);
+        }
+      }
+    </script>
+  </body>
+</html>

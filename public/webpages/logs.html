@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../styles/styles2.css" />
+  </head>
+  <body>
+    <!-- Header -->
+    <header>
+      <div class="header-content">
+        <h1>DATA FUSION</h1>
+      </div>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <nav class="tabs">
+      <a href="home">Home</a>
+      <a href="datasource">Data Sources</a>
+      <a href="access-links">Access Links</a>
+      <a href="#" class="active">Logs</a>
+      <a href="test-connection">Test Connection</a>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+      <section class="content">
+    </div>
+    <!-- Buttons for Log Management -->
+    <div class="buttons">
+      <button id="refreshBtn">Refresh Log</button>
+      <button id="pauseBtn">Pause Refresh</button>
+      <button id="downloadBtn">Download Logs</button>
+    </div>
+
+        <!-- div for showing logs directly to html through the file -->
+        <div>
+          <div id="file-content">File content will appear here...</div>
+        </div>
+      </section>
+    </main>
+    <script>
+      // Function to fetch and display the log file
+    function fetchLogFile() {
+        fetch('http://localhost:3000/log')
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error('File not found or cannot be accessed.');
+            }
+            return response.text(); // Parse the file as text
+        })
+        .then((data) => {
+            document.getElementById('file-content').textContent = data; // Display content
+            scrollToBottom(); // Scroll to the bottom after content update
+        })
+        .catch((error) => {
+            console.error('Error loading file:', error);
+            document.getElementById('file-content').textContent =
+            'Error loading file.';
+        });
+    }
+
+    // Scroll to the bottom of the log content
+    function scrollToBottom() {
+        const fileContent = document.getElementById('file-content');
+        fileContent.scrollTop = fileContent.scrollHeight; // Scroll to the bottom
+    }
+
+    // Start auto-refresh every 5 seconds
+    function startAutoRefresh() {
+        refreshInterval = setInterval(() => {
+            if (!isPaused) {
+                fetchLogFile(); // Refresh log content
+            }
+        }, 5000);
+    }
+
+    // Stop the auto-refresh
+    function stopAutoRefresh() {
+        clearInterval(refreshInterval);
+    }
+
+    // Handle "Refresh Log" button click
+    document.getElementById('refreshBtn').addEventListener('click', () => {
+        fetchLogFile(); // Fetch log file manually  
+    });
+
+    // Handle "Pause Refresh" button click
+    document.getElementById('pauseBtn').addEventListener('click', () => {
+        isPaused = !isPaused;
+        document.getElementById('pauseBtn').textContent = isPaused
+        ? 'Resume Refresh'
+        : 'Pause Refresh'; // Toggle button text
+    });
+
+    // Handle "Download Logs" button click
+    document.getElementById('downloadBtn').addEventListener('click', () => {
+        fetch('http://localhost:3000/log')
+        .then((response) => response.text())
+        .then((data) => {
+        const blob = new Blob([data], { type: 'text/plain' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = 'logs.txt';
+        link.click(); // Trigger the download
+        });
+    });
+
+    // Initialize log file fetching
+    fetchLogFile();
+    startAutoRefresh(); // Start auto-refreshing the log file
+
+    </script>
+  </body>
+</html>

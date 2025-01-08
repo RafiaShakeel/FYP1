@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../styles/styles2.css" />
+  </head>
+  <body>
+    <!-- Header -->
+    <header>
+      <div class="header-content">
+        <h1>DATA FUSION</h1>
+      </div>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <nav class="tabs">
+      <a href="#" class="active">Home</a>
+      <a href="datasource">Data Sources</a>
+      <a href="access-links">Access Links</a>
+      <a href="logs">Logs</a>
+      <a href="test-connection">Test Connection</a>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+      <!-- Top Section -->
+      <div class="top-section">
+        <div class="left-panel">
+          <h2>Virtual Databases</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Version</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>DSDataTransfer</td>
+                <td>1</td>
+                <td>ACTIVE</td>
+              </tr>
+              <tr>
+                <td>OpenWorks_LSSE2E_SingleSource</td>
+                <td>5000.10.7</td>
+                <td>ACTIVE</td>
+              </tr>
+              <tr>
+                <td>OpenWorksCommonModel_LSSE2E</td>
+                <td>5000.10.7</td>
+                <td>ACTIVE</td>
+              </tr>
+              <tr>
+                <td>pg_pg</td>
+                <td>1</td>
+                <td>ACTIVE</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="right-panel">
+          <h2>Data Sources</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>petrelDS</td>
+                <td>ACTIVE</td>
+              </tr>
+              <tr>
+                <td>LSSE2E</td>
+                <td>ACTIVE</td>
+              </tr>
+              <tr>
+                <td>pg</td>
+                <td>ACTIVE</td>
+              </tr>
+              <tr>
+                <td>studio</td>
+                <td>ERROR: Could not connect to localhost</td>
+              </tr>
+              <tr>
+                <td>ExampleDS</td>
+                <td>ACTIVE</td>
+              </tr>
+              <tr>
+                <td>dsmonitor</td>
+                <td>ACTIVE</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Bottom Section -->
+      <div class="bottom-section">
+        <div class="left-panel">
+          <h2>Installed Plugins</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Version</th>
+                <th>Access Links</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Code Examples</td>
+                <td>10ep.5.0</td>
+                <td>Code Viewer</td>
+              </tr>
+              <tr>
+                <td>DSIS Configuration Services</td>
+                <td>10ep.5.0</td>
+                <td>DSConfiguration API Playground</td>
+              </tr>
+              <tr>
+                <td>Data Service</td>
+                <td>10ep.5.0</td>
+                <td>Virtual Databases, API Playground</td>
+              </tr>
+              <tr>
+                <td>Data Transfer</td>
+                <td>14.5.5</td>
+                <td>Transfer Framework API</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="right-panel">
+          <h2>Ports</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Socket Binding Name</th>
+                <th>Port</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>http</td>
+                <td>8080</td>
+              </tr>
+              <tr>
+                <td>https</td>
+                <td>8443</td>
+              </tr>
+              <tr>
+                <td>management-http</td>
+                <td>9990</td>
+              </tr>
+              <tr>
+                <td>management-native</td>
+                <td>10000</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>
