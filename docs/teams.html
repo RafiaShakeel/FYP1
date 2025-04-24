@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Data Fusion Team</title>
+    <link rel="icon" type="image/x-icon" href="../images/favicon2.png" />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../styles/styles.css" />
+    <style>
+      /* Header Image */
+      .header-image {
+        position: relative;
+        width: 100%;
+        height: 400px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .img {
+        height: 90%;
+        width: 100%;
+        padding-right: 1%;
+        object-fit: cover;
+      }
+
+      /* Text Overlay */
+      .header-text {
+        position: absolute;
+        color: white;
+        font-size: 36px;
+        font-weight: bold;
+        text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+      }
+
+      /* Team Section */
+      .team-container {
+        text-align: center;
+        padding: 50px;
+      }
+
+      .team-grid {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 20px;
+      }
+
+      .team-member {
+        background: #f8f8f8;
+        padding: 20px;
+        border-radius: 10px;
+        width: 250px;
+        text-align: center;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      .team-member img {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        object-fit: cover;
+      }
+
+      .team-member h3 {
+        margin: 10px 0;
+      }
+
+      .team-member p {
+        color: #666;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navbar -->
+    <nav>
+      <div class="logo"><a href="index">Data Fusion</a></div>
+      <ul>
+        <li><a href="team">Team</a></li>
+        <li><a href="about-us">About Us</a></li>
+        <li><a href="sign-in">Sign In</a></li>
+      </ul>
+    </nav>
+
+    <!-- Header Image -->
+    <div class="header-image">
+      <img
+        class="img"
+        src="../images/indexPage/bgblue.png"
+        alt="Team Background"
+      />
+      <div class="header-text">Our Team</div>
+    </div>
+
+    <!-- Team Section -->
+    <div class="team-container">
+      <h2>Meet Our Team</h2>
+      <p>
+        We are a team of professionals committed to innovation and excellence.
+      </p>
+
+      <div class="team-grid">
+        <div class="team-member">
+          <img src="../images/team/member1.png" alt="Team Member 1" />
+          <h3>Mr. Muhammad Ahsan</h3>
+          <p>Supervisor & Cordinator</p>
+        </div>
+
+        <div class="team-member">
+          <img src="../images/team/member2.jpeg" alt="Team Member 2" />
+          <h3>Ms. Rafia Shakeel</h3>
+          <p>Lead developer</p>
+        </div>
+
+        <div class="team-member">
+          <img src="../images/team/member3.jpeg" alt="Team Member 3" />
+          <h3>Ms. Aiman Tariq</h3>
+          <p>Designer</p>
+        </div>
+
+        <div class="team-member">
+          <img src="../images/team/member4.jpeg" alt="Team Member 4" />
+          <h3>Ms. Nayab Akhtar</h3>
+          <p>Technical Writer & Tester</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="footer-top">
+        <h2>Join Our Team<br />Transform data into insights with us!</h2>
+        <button onclick="location.href='sign-in'">Sign In Now</button>
+      </div>
+      <div class="footer-content">
+        <div class="footer-column">
+          <h3>Data Fusion</h3>
+          <p>
+            Data Fusion is a data federated system designed to simplify data
+            management.
+          </p>
+        </div>
+        <div class="footer-column" style="padding-left: 100px">
+          <h3>Links</h3>
+          <ul>
+            <li><a href="about-us">About Us</a></li>
+          </ul>
+        </div>
+        <div class="footer-column footer-contact">
+          <h3>Contact</h3>
+          <p>📞 (+92) 335 537 1478</p>
+          <p>📧 info@fuse_data.com</p>
+          <p>📍 Islamabad, Punjab, Pakistan</p>
+          <div class="footer-social">
+            <a href="#" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+            <a href="#" target="_blank"><i class="fab fa-youtube"></i></a>
+            <a href="#" target="_blank"><i class="fab fa-instagram"></i></a>
+            <a href="#" target="_blank"><i class="fab fa-facebook-f"></i></a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <footer class="endfooter">
+      <div class="endfooter-content">
+        <p>Copyrights © 2025 Data Fusion</p>
+        <ul class="endfooter-links">
+          <li><a href="terms-of-use">Terms of Use</a></li>
+          <li><a href="privacy-policy">Privacy & Cookies Policy</a></li>
+          <li><a href="security">Security</a></li>
+          <li>
+            <a href="https://maps.app.goo.gl/1zSjsQGiQwXX7bdS7">Offices</a>
+          </li>
+        </ul>
+      </div>
+    </footer>
+  </body>
+</html>

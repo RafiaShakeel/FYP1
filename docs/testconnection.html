@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Presto Query Executor</title>
+    <link rel="stylesheet" href="style.css" />
+    <style>
+      .query-executor {
+        width: 80%;
+        margin: 40px auto;
+        text-align: center;
+      }
+
+      #query-input {
+        width: 100%;
+        padding: 10px;
+        font-size: 16px;
+      }
+
+      #execute-query {
+        margin-top: 10px;
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+      }
+
+      #query-results {
+        margin-top: 20px;
+        text-align: left;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="query-executor">
+      <input
+        type="text"
+        id="query-input"
+        placeholder="Enter your Presto query"
+      />
+      <button id="execute-query">Execute Query</button>
+      <div id="query-results"></div>
+    </div>
+
+    <script>
+      document
+        .getElementById("execute-query")
+        .addEventListener("click", function () {
+          const query = document.getElementById("query-input").value;
+          const resultsDiv = document.getElementById("query-results");
+
+          // Clear previous results
+          resultsDiv.innerHTML = "";
+
+          if (query) {
+            fetch("/execute-query", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ query: query }),
+            })
+              .then((response) => response.json())
+              .then((data) => {
+                // Assuming data is in the format { columns: [], rows: [] }
+                const columns = data.columns;
+                const rows = data.rows;
+
+                // Create table
+                const table = document.createElement("table");
+                const thead = document.createElement("thead");
+                const tbody = document.createElement("tbody");
+
+                // Create table headers
+                const headerRow = document.createElement("tr");
+                columns.forEach((column) => {
+                  const th = document.createElement("th");
+                  th.textContent = column;
+                  headerRow.appendChild(th);
+                });
+                thead.appendChild(headerRow);
+                table.appendChild(thead);
+
+                // Create table rows
+                rows.forEach((row) => {
+                  const rowElement = document.createElement("tr");
+                  row.forEach((cell) => {
+                    const td = document.createElement("td");
+                    td.textContent = cell;
+                    rowElement.appendChild(td);
+                  });
+                  tbody.appendChild(rowElement);
+                });
+                table.appendChild(tbody);
+
+                resultsDiv.appendChild(table);
+              })
+              .catch((error) => {
+                resultsDiv.innerHTML =
+                  "Error executing query: " + error.message;
+              });
+          } else {
+            resultsDiv.innerHTML = "Please enter a query.";
+          }
+        });
+    </script>
+  </body>
+</html>

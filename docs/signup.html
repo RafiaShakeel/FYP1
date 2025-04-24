@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Data Fusion</title>
+    <link rel="stylesheet" href="../styles/styles.css" />
+  </head>
+  <body>
+    <nav>
+      <div class="logo"><a href="index.html">Data Fusion</a></div>
+      <ul>
+        <li><a href="#team">Team</a></li>
+        <li><a href="#about">About Us</a></li>
+        <li><a href="sign-in">Sign In</a></li>
+        <li><a href="sign-up">Sign Up</a></li>
+      </ul>
+    </nav>
+    <div class="parentcontainer">
+      <div class="container">
+        <div class="logo-section">
+          <img src="../images/logoDFS.jpg" alt="Data Fusion Logo" />
+          <p>
+            Welcome to Data Fusion! A platform to unify and transform your data
+            seamlessly.
+          </p>
+        </div>
+        <div class="form-container">
+          <h2>Sign Up</h2>
+          <form>
+            <label for="username">Username:</label>
+            <input
+              type="text"
+              id="username"
+              name="username"
+              placeholder="Your Username"
+              required
+            />
+            <label for="email">Email:</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              placeholder="Your Email"
+              required
+            />
+            <label for="password">Password:</label>
+            <input
+              type="password"
+              id="password"
+              placeholder="Your Password"
+              name="password"
+              required
+            />
+            <label for="role">Role:</label>
+            <select id="role" name="role" required>
+              <option value="" disabled selected>Select your role</option>
+              <option value="admin">Admin</option>
+              <option value="data-analyst">Data Analyst</option>
+              <option value="developer">Developer</option>
+              <option value="manager">Manager</option>
+              <option value="other">Other</option>
+            </select>
+
+            <label for="organization">Organization:</label>
+            <input
+              type="text"
+              id="organization"
+              name="organization"
+              placeholder="Your organization"
+              required
+            />
+
+            <button type="submit">Sign Up</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

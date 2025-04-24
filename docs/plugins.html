@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+    />
+    <link rel="icon" type="image/x-icon" href="../images/favicon2.png" />
+    <title>Data Fusion</title>
+    <link rel="stylesheet" href="../styles/styles2.css" />
+    <style>
+      /* Simple popup style */
+      /* Updated popup style to match color scheme */
+      #popup {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 50%;
+        max-width: 600px;
+        max-height: 70vh;
+        background: #ecf1f4;
+        border: 1px solid #005f8a;
+        border-radius: 5px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        overflow: auto;
+        padding: 20px;
+        z-index: 1000;
+      }
+
+      #popup h3 {
+        color: #005f8a;
+        margin-top: 0;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #d7e2f6;
+      }
+
+      #popup pre {
+        background-color: white;
+        padding: 15px;
+        border-radius: 4px;
+        border: 1px solid #d7e2f6;
+        overflow-x: auto;
+        max-height: 50vh;
+        font-family: monospace;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+      }
+
+      #popup button {
+        background-color: #005f8a;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 4px;
+        cursor: pointer;
+        margin-top: 15px;
+        float: right;
+      }
+
+      #popup button:hover {
+        background-color: #004a6d;
+      }
+
+      #overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 999;
+      }
+      .add-datasource-btn-sidebar {
+        background-color: #005f8a;
+        color: white;
+        padding: 8px 16px;
+        margin-right: 1%;
+        margin-top: 1%;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        position: absolute;
+        right: 20px;
+        top: 0;
+      }
+
+      .add-datasource-btn,
+      .cancel-btn {
+        background-color: #005f8a;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        margin: 0 5px;
+        cursor: pointer;
+        border-radius: 4px;
+        transition: background-color 0.3s ease;
+      }
+
+      .add-datasource-btn {
+        margin-left: 38%;
+      }
+
+      .sidebar-form {
+        position: fixed;
+        top: 0;
+        right: -40%;
+        width: 35%;
+        height: 100%;
+        background-color: #ecf1f4;
+        box-shadow: -3px 0 5px rgba(0, 0, 0, 0.2);
+        transition: right 0.3s ease;
+        padding: 16px;
+        z-index: 10;
+      }
+
+      .sidebar-form.open {
+        right: 0;
+      }
+
+      .sidebar-form h3 {
+        margin-top: 0;
+      }
+
+      .sidebar-form label {
+        display: block;
+        margin-top: 10px;
+      }
+
+      .sidebar-form input {
+        width: 97%;
+        padding: 8px;
+        margin-top: 4px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+      }
+      .close-x-btn {
+        margin-top: 12px;
+        background-color: #005f8a;
+        color: white;
+        border: none;
+        padding: 8px 12px;
+        border-radius: 4px;
+        cursor: pointer;
+        align-content: center;
+      }
+      .sidebar-header {
+        padding-left: 10px;
+        padding-right: 10px;
+        display: flex;
+        gap: 10%;
+        align-items: baseline;
+        justify-content: space-between;
+        border: 1px solid #005f8a;
+        background-color: #d7e2f6;
+      }
+      .content-container {
+        position: relative;
+      }
+      
+      /* Plugins table styles */
+      .plugins-table {
+        width: 100%;
+        margin-top: 20px;
+        border-collapse: collapse;
+      }
+      
+      .plugins-table th, .plugins-table td {
+        padding: 10px;
+        border: 1px solid #ddd;
+        text-align: left;
+      }
+      
+      .plugins-table th {
+        background-color: #005f8a;
+        color: white;
+      }
+      
+      .plugins-table tr:nth-child(even) {
+        background-color: #f2f2f2;
+      }
+      
+      .pagination-controls {
+        margin-top: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+      }
+      
+      .pagination-button {
+        background-color: #005f8a;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+      
+      .pagination-button:disabled {
+        background-color: #cccccc;
+        cursor: not-allowed;
+      }
+      
+      .pagination-info {
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="header-content">
+        <h1>DATA FUSION</h1>
+      </div>
+    </header>
+
+    <nav class="tabs">
+      <a href="home">Home</a>
+      <a href="datasource">Data Sources</a>
+      <a href="access-links">Access Links</a>
+      <a href="logs">Logs</a>
+      <a href="#"  class="active">Plugins</a>
+      <button id="presto" class="presto-btn">Start presto</button>
+      <button id="logoutBtn" class="logout-btn">Logout</button>
+    </nav>
+
+    <main>
+      <section class="content content-container">
+    
+          <!-- Plugins Section -->
+          <div class="plugins-section" style="margin-top: 40px;">
+            <h2>Installed Plugins</h2>
+            <table class="plugins-table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Version</th>
+                </tr>
+              </thead>
+              <tbody id="pluginsTableBody"></tbody>
+            </table>
+            <div class="pagination-controls" id="paginationControls"></div>
+          </div>
+          
+        </div>
+      </section>
+    </main>
+
+    
+
+    <script>
+      
+      // Pagination variables for plugins
+      let currentPage = 1;
+      const rowsPerPage = 15;
+      let pluginsData = [];
+
+      document.addEventListener("DOMContentLoaded", function () {    
+
+        async function fetchInstalledPlugins() {
+          try {
+            const response = await fetch("/api/plugins");
+            pluginsData = await response.json();
+            currentPage = 1; // Reset to first page
+            renderPluginsTable();
+          } catch (error) {
+            console.error("Error fetching installed plugins:", error);
+          }
+        }
+
+        function renderPluginsTable() {
+          const tableBody = document.getElementById("pluginsTableBody");
+          tableBody.innerHTML = "";
+
+          const startIndex = (currentPage - 1) * rowsPerPage;
+          const endIndex = startIndex + rowsPerPage;
+
+          const paginatedData = pluginsData.slice(startIndex, endIndex);
+
+          paginatedData.forEach((plugin) => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+              <td>${plugin.pluginName}</td>
+              <td>${plugin.version || "N/A"}</td>
+            `;
+            tableBody.appendChild(row);
+          });
+
+          renderPaginationControls();
+        }
+
+        function renderPaginationControls() {
+          const paginationDiv = document.getElementById("paginationControls");
+          paginationDiv.innerHTML = "";
+
+          const totalPages = Math.ceil(pluginsData.length / rowsPerPage);
+
+          if (totalPages === 0) return; // No pagination if no data
+
+          const prevButton = document.createElement("button");
+          prevButton.innerHTML = "&#9664;"; // Left arrow
+          prevButton.disabled = currentPage === 1;
+          prevButton.className = "pagination-button";
+          prevButton.addEventListener("click", () => changePage(-1));
+
+          const nextButton = document.createElement("button");
+          nextButton.innerHTML = "&#9654;"; // Right arrow
+          nextButton.disabled = currentPage >= totalPages;
+          nextButton.className = "pagination-button";
+          nextButton.addEventListener("click", () => changePage(1));
+
+          const pageInfo = document.createElement("span");
+          pageInfo.textContent = `Page ${currentPage} of ${totalPages}`;
+          pageInfo.className = "pagination-info";
+
+          paginationDiv.appendChild(prevButton);
+          paginationDiv.appendChild(pageInfo);
+          paginationDiv.appendChild(nextButton);
+        }
+
+        function changePage(direction) {
+          const totalPages = Math.ceil(pluginsData.length / rowsPerPage);
+          currentPage += direction;
+
+          if (currentPage < 1) currentPage = 1;
+          if (currentPage > totalPages) currentPage = totalPages;
+
+          renderPluginsTable();
+        }
+
+        
+        fetchInstalledPlugins();
+
+        // Sidebar functionality
+        const openSidebarBtn = document.getElementById("openSidebarBtn");
+        const closeSidebarBtn = document.getElementById("closeSidebarBtn");
+        const sidebarForm = document.getElementById("sidebar-form");
+        const presto = document.getElementById("presto");
+
+        presto.addEventListener("click", startpresto);
+        function startpresto() {
+          fetch("/start-presto")
+            .then((response) => response.text())
+            .then((data) => alert(data))
+            .catch((error) => alert(error));
+        }
+
+        openSidebarBtn.addEventListener("click", function () {
+          sidebarForm.classList.add("open");
+        });
+
+        closeSidebarBtn.addEventListener("click", function () {
+          sidebarForm.classList.remove("open");
+        });
+
+        // Form submission handler
+        document
+          .getElementById("dataSourceForm")
+          .addEventListener("submit", function (e) {
+            e.preventDefault();
+            createFile();
+            sidebarForm.classList.remove("open");
+            e.target.reset();
+            fetchDataSources(); // Refresh the table after adding new data source
+          });
+
+        const closeXBtn = document.getElementById("closeXBtn");
+        closeXBtn.addEventListener("click", function () {
+          sidebarForm.classList.remove("open");
+        });
+        
+        // Logout functionality
+        document
+          .getElementById("logoutBtn")
+          .addEventListener("click", function () {
+            sessionStorage.clear();
+            window.location.href = "sign-in";
+          });
+      });
+    </script>
+  </body>
+</html>

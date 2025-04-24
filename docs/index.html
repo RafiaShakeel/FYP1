@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Data Fusion</title>
+    <link rel="icon" type="image/x-icon" href="../images/favicon2.png" />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../styles/styles.css" />
+  </head>
+  <body>
+    <!-- Navbar -->
+    <nav>
+      <div class="logo"><a href="index">Data Fusion</a></div>
+      <ul>
+        <li><a href="team">Team</a></li>
+        <li><a href="about-us">About Us</a></li>
+        <li><a href="sign-in">Sign In</a></li>
+        <!-- <li><a href="sign-up">Sign Up</a></li> -->
+      </ul>
+    </nav>
+
+    <!-- Scrollable Gallery -->
+    <div class="gallery-container">
+      <div class="gallery-track">
+        <div class="gallery-item">
+          <img
+            src="../images/indexPage/sample.jpg"
+            alt="Data Visualization 1"
+          />
+          <div class="gallery-text">
+            <h3>Data Visualization Insight</h3>
+            <p style="text-align: justify">
+              Data federation systems rely on robust connectivity and
+              integration capabilities to interact with diverse data sources.
+              These sources may vary from relational databases to NoSQL stores,
+              flat files, or cloud-based storage solutions.
+            </p>
+          </div>
+        </div>
+        <div class="gallery-item">
+          <img
+            src="../images/indexPage/sample3.jfif"
+            alt="Data Visualization 2"
+          />
+          <div class="gallery-text">
+            <h3>Analytics Overview</h3>
+            <p style="text-align: justify">
+              A core component of data federation is the unified query
+              interface, allowing users to run complex queries across different
+              data sources as if they were querying a single database. This
+              unified querying capability simplifies data access for end-users.
+            </p>
+          </div>
+        </div>
+        <div class="gallery-item">
+          <img
+            src="../images/indexPage/sample2.jfif"
+            alt="Data Visualization 3"
+          />
+          <div class="gallery-text">
+            <h3>Performance Dashboard</h3>
+            <p style="text-align: justify">
+              Data federation systems use data virtualization to create an
+              abstraction layer over multiple data sources. This approach helps
+              maintain data freshness, reduces storage costs, and provides a
+              virtualized view of data from multiple sources.
+            </p>
+          </div>
+        </div>
+        <div class="gallery-item">
+          <img
+            src="../images/indexPage/sample.jfif"
+            alt="Data Visualization 4"
+          />
+          <div class="gallery-text" style="max-width: 50%">
+            <h3>BlockChain for Access Control</h3>
+            <p style="text-align: justify; margin-left: 20px">
+              Blockchain enables secure, decentralized access control using
+              smart contracts. It ensures transparent, immutable permissions and
+              reduces reliance on central authorities. This enhances data
+              security and provides an auditable access trail.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="gallery-nav prev" onclick="prevImage()">&#10094;</div>
+      <div class="gallery-nav next" onclick="nextImage()">&#10095;</div>
+    </div>
+
+    <div id="data-fusion-section">
+      <h2>Why Our Data Fusion System</h2>
+      <p class="description">
+        Powered by data federation, our platform simplifies data connectivity,
+        transformation, and delivery for all your business needs.
+      </p>
+      <div class="features">
+        <div class="feature">
+          <div class="icon">&#10004;</div>
+          <h3>Simplified, Secure Data Access</h3>
+          <p>
+            A single access layer that integrates, manages, and secures all your
+            enterprise data, regardless of location.
+          </p>
+        </div>
+        <div class="feature">
+          <div class="icon">&#10004;</div>
+          <h3>AI-Ready Insights</h3>
+          <p>
+            Automates routine tasks and prepares AI-ready data for seamless
+            analytics and decision-making.
+          </p>
+        </div>
+        <div class="feature">
+          <div class="icon">&#10004;</div>
+          <h3>Unified Data in Business Language</h3>
+          <p>
+            Provides data in a consistent, actionable format that's easily
+            understood by all stakeholders.
+          </p>
+        </div>
+      </div>
+    </div>
+    <div id="data-fusion-section">
+      <h2>With Data Fusion, You can.....</h2>
+      <div class="features-container">
+        <div class="feature-item">
+          <div class="imgBox">
+            <img src="../images/indexPage/featureimg1.png" alt="Feature 1" />
+          </div>
+          <div class="feature-text">
+            <p>
+              Provide Real-Time Unified Data for Enhanced Business Insights,
+              Operational Visibility, and Customer Intelligence.
+            </p>
+          </div>
+        </div>
+        <div class="feature-item">
+          <div class="imgBox">
+            <img src="../images/indexPage/featureimg2.png" alt="Feature 1" />
+          </div>
+          <div class="feature-text">
+            <p>
+              Ensure Centralized Governance, Security, and Regulatory Compliance
+              from a Single Control Point.
+            </p>
+          </div>
+        </div>
+        <div class="feature-item">
+          <div class="imgBox">
+            <img src="../images/indexPage/featureimg3.jpg" alt="Feature 1" />
+          </div>
+          <div class="feature-text">
+            <p>
+              Modernize Your Data Infrastructure, Boost Performance, and Cut
+              Cloud Costs, All Without Disrupting Business Operations.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <footer class="footer">
+      <div class="footer-top">
+        <h2>
+          What's next:<br />
+          Gain real-time insights from your data;<br />
+          begin your digital transformation today!
+        </h2>
+        <button onclick="location.href='sign-in'">Sign In Now</button>
+      </div>
+      <div class="footer-content">
+        <div class="footer-column">
+          <h3>Data Fusion</h3>
+          <p>
+            Data Fusion is a powerful data federated system designed to simplify
+            data management. It allows organizations to access and deliver data
+            in a unified way, making it easier to support various business needs
+            quickly and efficiently. By improving data integration and
+            accessibility, systems like Data Fusion can provide significant
+            value to organizations, helping them achieve better results and
+            faster returns on their data-related investments.
+          </p>
+        </div>
+        <div class="footer-column" style="padding-left: 100px">
+          <h3>Links</h3>
+          <ul>
+            <li><a href="about-us">About Us</a></li>
+          </ul>
+        </div>
+        <div class="footer-column footer-contact">
+          <h3>Contact</h3>
+          <p>📞 (+92) 335 537 1478</p>
+          <p>📧 info@fuse_data.com</p>
+          <p>📍 Islamabad , Punjab , Pakistan</p>
+          <div class="footer-social">
+            <a
+              href="https://www.linkedin.com/company/lmkr/posts/?feedView=all"
+              target="_blank"
+              aria-label="LinkedIn"
+              ><i class="fab fa-linkedin-in"></i
+            ></a>
+            <a
+              href="https://www.youtube.com/@GVERSEGGX"
+              target="_blank"
+              aria-label="YouTube"
+              ><i class="fab fa-youtube"></i
+            ></a>
+            <a
+              href="https://www.instagram.com/discoverlmkr/"
+              target="_blank"
+              aria-label="Instagram"
+              ><i class="fab fa-instagram"></i
+            ></a>
+            <a
+              href="https://www.facebook.com/lmkrnews/photos/"
+              target="_blank"
+              aria-label="Facebook"
+              ><i class="fab fa-facebook-f"></i
+            ></a>
+          </div>
+        </div>
+      </div>
+    </footer>
+    <footer class="endfooter">
+      <div class="endfooter-content">
+        <p>Copyrights © 2025 Data fusion</p>
+        <ul class="endfooter-links">
+          <li><a href="terms-of-use">Terms of Use</a></li>
+          <li><a href="privacy-policy">Privacy & Cookies Policy</a></li>
+          <li><a href="security">Security</a></li>
+          <li>
+            <a href="https://maps.app.goo.gl/1zSjsQGiQwXX7bdS7">Offices</a>
+          </li>
+        </ul>
+      </div>
+    </footer>
+
+    <script>
+      let currentIndex = 0;
+      const galleryTrack = document.querySelector(".gallery-track");
+      const galleryItems = document.querySelectorAll(".gallery-item");
+      const totalItems = galleryItems.length;
+
+      function updateGallery() {
+        const offset = -currentIndex * 100;
+        galleryTrack.style.transform = `translateX(${offset}%)`;
+      }
+
+      function prevImage() {
+        currentIndex = currentIndex > 0 ? currentIndex - 1 : totalItems - 1;
+        updateGallery();
+      }
+
+      function nextImage() {
+        currentIndex = currentIndex < totalItems - 1 ? currentIndex + 1 : 0;
+        updateGallery();
+      }
+
+      // Automatically change images every 10 seconds
+      setInterval(nextImage, 5000); // 10000 ms = 10 seconds
+    </script>
+  </body>
+</html>

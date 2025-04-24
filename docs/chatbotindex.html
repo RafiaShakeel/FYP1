@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Ollama Chatbot</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 40px;
+        background-color: #f4f4f4;
+      }
+
+      #chat-container {
+        max-width: 600px;
+        margin: auto;
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+
+      #chat {
+        height: 300px;
+        overflow-y: scroll;
+        border: 1px solid #ccc;
+        padding: 10px;
+        margin-bottom: 10px;
+        white-space: pre-wrap;
+      }
+
+      #user-input {
+        width: 80%;
+        padding: 10px;
+      }
+
+      #send-btn {
+        padding: 10px 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="chat-container">
+      <div id="chat"></div>
+      <input
+        type="text"
+        id="user-input"
+        placeholder="Type your message here..."
+      />
+      <button id="send-btn">Send</button>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const sendBtn = document.getElementById("send-btn");
+        const userInput = document.getElementById("user-input");
+        const chat = document.getElementById("chat");
+
+        sendBtn.addEventListener("click", async function () {
+          const message = userInput.value.trim();
+          if (!message) return;
+
+          // Show user message
+          chat.innerHTML += `👤 You: ${message}\n`;
+          userInput.value = "";
+
+          try {
+            const response = await fetch(
+              "http://localhost:11434/api/generate",
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  model: "llama3", // change this if you're using another model
+                  prompt: message,
+                  stream: false,
+                }),
+              }
+            );
+
+            const result = await response.json();
+            chat.innerHTML += `🤖 Bot: ${result.response}\n`;
+            chat.scrollTop = chat.scrollHeight;
+          } catch (error) {
+            chat.innerHTML += `❌ Error: ${error.message}\n`;
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
