@@ -3,6 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Data Fusion logs</title>
+    <link rel="icon" type="image/x-icon" href="../images/favicon2.png" />
     <link rel="stylesheet" href="../styles/styles2.css" />
   </head>
   <body>
@@ -19,7 +21,11 @@
       <a href="datasource">Data Sources</a>
       <a href="access-links">Access Links</a>
       <a href="#" class="active">Logs</a>
-      <a href="test-connection">Test Connection</a>
+      <a href="plugins">Plugins</a>
+      <!-- <a href="test-connection">Test Connection</a> -->
+       
+      <button id="presto" class="presto-btn">Start presto</button>
+      <button id="logoutBtn" class="logout-btn">Logout</button>
     </nav>
 
     <!-- Main Content -->
@@ -40,34 +46,59 @@
       </section>
     </main>
     <script>
-      // Function to fetch and display the log file
+      document.addEventListener("DOMContentLoaded", function () {
+    // Fetch user details from session storage
+    const userName = sessionStorage.getItem("user_name");
+    const userEmail = sessionStorage.getItem("user_email");
+
+    if (!userName || !userEmail) {
+        window.location.href = "sign-in"; // Redirect if not logged in
+    }
+
+    document.getElementById("logoutBtn").addEventListener("click", function () {
+        sessionStorage.clear();
+        window.location.href = "sign-in";
+    });
+
+    let refreshInterval;
+    let isPaused = false;
+
+    // Function to fetch and display the log file
     function fetchLogFile() {
-        fetch('http://localhost:3000/log')
-        .then((response) => {
-            if (!response.ok) {
-                throw new Error('File not found or cannot be accessed.');
-            }
-            return response.text(); // Parse the file as text
-        })
-        .then((data) => {
-            document.getElementById('file-content').textContent = data; // Display content
-            scrollToBottom(); // Scroll to the bottom after content update
-        })
-        .catch((error) => {
-            console.error('Error loading file:', error);
-            document.getElementById('file-content').textContent =
-            'Error loading file.';
-        });
+        fetch("http://localhost:3000/log")
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error("File not found or cannot be accessed.");
+                }
+                return response.text(); // Parse the file as text
+            })
+            .then((data) => {
+                const fileContent = document.getElementById("file-content");
+                if (fileContent) {
+                    fileContent.textContent = data; // Display content
+                    scrollToBottom(); // Scroll to the bottom after content update
+                }
+            })
+            .catch((error) => {
+                console.error("Error loading file:", error);
+                const fileContent = document.getElementById("file-content");
+                if (fileContent) {
+                    fileContent.textContent = "Error loading file.";
+                }
+            });
     }
 
     // Scroll to the bottom of the log content
     function scrollToBottom() {
-        const fileContent = document.getElementById('file-content');
-        fileContent.scrollTop = fileContent.scrollHeight; // Scroll to the bottom
+        const fileContent = document.getElementById("file-content");
+        if (fileContent) {
+            fileContent.scrollTop = fileContent.scrollHeight; // Scroll to the bottom
+        }
     }
 
     // Start auto-refresh every 5 seconds
     function startAutoRefresh() {
+        stopAutoRefresh(); // Ensure no duplicate intervals
         refreshInterval = setInterval(() => {
             if (!isPaused) {
                 fetchLogFile(); // Refresh log content
@@ -80,35 +111,58 @@
         clearInterval(refreshInterval);
     }
 
-    // Handle "Refresh Log" button click
-    document.getElementById('refreshBtn').addEventListener('click', () => {
-        fetchLogFile(); // Fetch log file manually  
-    });
+    // Ensure buttons exist before adding event listeners
+    const refreshBtn = document.getElementById("refreshBtn");
+    const pauseBtn = document.getElementById("pauseBtn");
+    const downloadBtn = document.getElementById("downloadBtn");
 
-    // Handle "Pause Refresh" button click
-    document.getElementById('pauseBtn').addEventListener('click', () => {
-        isPaused = !isPaused;
-        document.getElementById('pauseBtn').textContent = isPaused
-        ? 'Resume Refresh'
-        : 'Pause Refresh'; // Toggle button text
-    });
+    if (refreshBtn) {
+        refreshBtn.addEventListener("click", fetchLogFile); // Fetch log file manually
+    }
 
-    // Handle "Download Logs" button click
-    document.getElementById('downloadBtn').addEventListener('click', () => {
-        fetch('http://localhost:3000/log')
-        .then((response) => response.text())
-        .then((data) => {
-        const blob = new Blob([data], { type: 'text/plain' });
-        const link = document.createElement('a');
-        link.href = URL.createObjectURL(blob);
-        link.download = 'logs.txt';
-        link.click(); // Trigger the download
+    if (pauseBtn) {
+        pauseBtn.addEventListener("click", () => {
+            isPaused = !isPaused;
+            pauseBtn.textContent = isPaused ? "Resume Refresh" : "Pause Refresh"; // Toggle button text
         });
-    });
+    }
+
+    if (downloadBtn) {
+        downloadBtn.addEventListener("click", () => {
+            fetch("http://localhost:3000/log")
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error("Failed to download log file.");
+                    }
+                    return response.text();
+                })
+                .then((data) => {
+                    const blob = new Blob([data], { type: "text/plain" });
+                    const link = document.createElement("a");
+                    link.href = URL.createObjectURL(blob);
+                    link.download = "logs.txt";
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                })
+                .catch((error) => console.error("Download error:", error));
+        });
+    }
 
     // Initialize log file fetching
     fetchLogFile();
     startAutoRefresh(); // Start auto-refreshing the log file
+
+    const presto = document.getElementById("presto");
+
+        presto.addEventListener("click", startpresto);
+        function startpresto() {
+          fetch("/start-presto")
+            .then((response) => response.text())
+            .then((data) => alert(data))
+            .catch((error) => alert(error));
+        }
+});
 
     </script>
   </body>

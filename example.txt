@@ -1,0 +1,3 @@
+only 4 fields are needed should i only add them on the form or should it contain all fields as the old system?
+and the table is altered, shiuld it be like old system?
+what should be my next week's tasks?

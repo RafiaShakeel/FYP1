@@ -3,100 +3,436 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+    />
+
+    <link rel="icon" type="image/x-icon" href="../images/favicon2.png" />
+    <title>Data Fusion</title>
     <link rel="stylesheet" href="../styles/styles2.css" />
+    <style>
+      /* Simple popup style */
+      /* Updated popup style to match color scheme */
+      #popup {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 50%;
+        max-width: 600px;
+        max-height: 70vh;
+        background: #ecf1f4;
+        border: 1px solid #005f8a;
+        border-radius: 5px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        overflow: auto;
+        padding: 20px;
+        z-index: 1000;
+      }
+
+      #popup h3 {
+        color: #005f8a;
+        margin-top: 0;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #d7e2f6;
+      }
+
+      #popup pre {
+        background-color: white;
+        padding: 15px;
+        border-radius: 4px;
+        border: 1px solid #d7e2f6;
+        overflow-x: auto;
+        max-height: 50vh;
+        font-family: monospace;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+      }
+
+      #popup button {
+        background-color: #005f8a;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 4px;
+        cursor: pointer;
+        margin-top: 15px;
+        float: right;
+      }
+
+      #popup button:hover {
+        background-color: #004a6d;
+      }
+
+      #overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 999;
+      }
+      .add-datasource-btn-sidebar {
+        background-color: #005f8a;
+        color: white;
+        padding: 8px 16px;
+        margin-right: 1%;
+        margin-top: 1%;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        position: absolute;
+        right: 20px;
+        top: 0;
+      }
+
+      .add-datasource-btn,
+      .cancel-btn {
+        background-color: #005f8a;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        margin: 0 5px;
+        cursor: pointer;
+        border-radius: 4px;
+        transition: background-color 0.3s ease;
+      }
+
+      .add-datasource-btn {
+        margin-left: 38%;
+      }
+
+      .sidebar-form {
+        position: fixed;
+        top: 0;
+        right: -40%;
+        width: 35%;
+        height: 100%;
+        background-color: #ecf1f4;
+        box-shadow: -3px 0 5px rgba(0, 0, 0, 0.2);
+        transition: right 0.3s ease;
+        padding: 16px;
+        z-index: 10;
+      }
+
+      .sidebar-form.open {
+        right: 0;
+      }
+
+      .sidebar-form h3 {
+        margin-top: 0;
+      }
+
+      .sidebar-form label {
+        display: block;
+        margin-top: 10px;
+      }
+
+      .sidebar-form input {
+        width: 97%;
+        padding: 8px;
+        margin-top: 4px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+      }
+      .close-x-btn {
+        margin-top: 12px;
+        background-color: #005f8a;
+        color: white;
+        border: none;
+        padding: 8px 12px;
+        border-radius: 4px;
+        cursor: pointer;
+        align-content: center;
+      }
+      .sidebar-header {
+        padding-left: 10px;
+        padding-right: 10px;
+        display: flex;
+        gap: 10%;
+        align-items: baseline;
+        justify-content: space-between;
+        border: 1px solid #005f8a;
+        background-color: #d7e2f6;
+      }
+      .content-container {
+        position: relative;
+      }
+    </style>
   </head>
   <body>
-    <!-- Header -->
     <header>
       <div class="header-content">
         <h1>DATA FUSION</h1>
       </div>
     </header>
 
-    <!-- Navigation Tabs -->
     <nav class="tabs">
       <a href="home">Home</a>
       <a href="#" class="active">Data Sources</a>
       <a href="access-links">Access Links</a>
       <a href="logs">Logs</a>
-      <a href="test-connection">Test Connection</a>
+      <a href="plugins">Plugins</a>
+      <button id="presto" class="presto-btn">Start presto</button>
+      <button id="logoutBtn" class="logout-btn">Logout</button>
     </nav>
 
-    <!-- Main Content -->
     <main>
-      <section class="content">
-        <!-- Data Source Section -->
-        <div class="data-source">
-          <h2>Data Source Details</h2>
-          <form>
-            <label>Data Source Type:</label>
-            <input
-              type="text"
-              name="dataSourceType"
-              placeholder="petrelstudio"
-            />
-
-            <label>Data Source Name:</label>
-            <input
-              type="text"
-              name="dataSourceName"
-              placeholder="studio"
-              readonly
-            />
-
-            <label>User Name:</label>
-            <input type="text" name="userName" />
-
-            <label>Password:</label>
-            <input type="password" name="password" />
-
-            <label>Host Name:</label>
-            <input type="text" name="hostName" placeholder="localhost" />
-
-            <label>Port:</label>
-            <input type="text" name="port" placeholder="7000" />
-
-            <label>DB Instance:</label>
-            <input type="text" name="dbInstance" placeholder="20" />
-
-            <button type="submit">Update</button>
-          </form>
-        </div>
-
-        <!-- Virtual Database Section -->
-        <div class="virtual-databases">
-          <h2>Virtual Databases</h2>
+      <section class="content content-container">
+        <button class="add-datasource-btn-sidebar" id="openSidebarBtn">
+          Add DataSource
+        </button>
+        <div class="dataSources">
+          <h2>Data Sources</h2>
           <table>
             <thead>
               <tr>
-                <th>VDB Name</th>
-                <th>Version</th>
-                <th>Teiid JDBC URL</th>
-                <th>Dynamic</th>
-                <th>Status</th>
+                <th>DataSource Name</th>
+                <th>Connector Name</th>
+                <th>Connection URL</th>
+                <th>Username</th>
                 <th>Actions</th>
               </tr>
             </thead>
-            <tbody>
-              <!-- Example Row -->
-              <tr>
-                <td>DSDataTransfer</td>
-                <td>1</td>
-                <td>jdbc:teiid:DSDataTransfer@mm...</td>
-                <td>true</td>
-                <td>ACTIVE</td>
-                <td>
-                  <a href="#">Delete</a>
-                  <a href="#">Details</a>
-                  <a href="#">Download</a>
-                  <a href="#">Undeploy</a>
-                </td>
-              </tr>
-              <!-- Repeat for each row -->
-            </tbody>
+            <tbody id="dataSourcesTableBody"></tbody>
           </table>
+          <!-- Popup Modal -->
+          <div id="overlay"></div>
+          <div id="popup">
+            <h3>File Content</h3>
+            <pre id="fileContent"></pre>
+            <button onclick="closePopup()">Close</button>
+          </div>
         </div>
       </section>
     </main>
+
+    <div class="sidebar-form" id="sidebar-form">
+      <div class="data-source">
+        <div class="sidebar-header">
+          <h3>Add DataSource</h3>
+          <button class="close-x-btn" id="closeXBtn">&times;</button>
+        </div>
+        <form id="dataSourceForm" class="data-source-form">
+          <div class="form-group">
+            <label>Data Source/Connector Name:</label>
+            <input
+              type="text"
+              id="dataSourceName"
+              placeholder="Enter Data Source Name"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label>Connector URL:</label>
+            <input
+              type="text"
+              id="connection-url"
+              placeholder="Enter Data Source Type"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label>Connection User:</label>
+            <input
+              type="text"
+              id="userName"
+              placeholder="Enter Username"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label>Connection Password:</label>
+            <input
+              type="password"
+              id="password"
+              placeholder="Enter Password"
+              required
+              minlength="6"
+            />
+          </div>
+          <div class="form-row-button">
+            <button type="submit" class="add-datasource-btn" id="button-test">
+              Update
+            </button>
+            <button type="button" class="cancel-btn" id="closeSidebarBtn">
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script>
+      // Global functions for popup
+      function showDetails(filename) {
+        fetch("/read-file", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ filename }),
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            document.getElementById("fileContent").innerText = data.content;
+            document.getElementById("overlay").style.display = "block";
+            document.getElementById("popup").style.display = "block";
+          })
+          .catch((err) => alert("Failed to read file."));
+      }
+
+      function closePopup() {
+        document.getElementById("overlay").style.display = "none";
+        document.getElementById("popup").style.display = "none";
+      }
+
+      document.addEventListener("DOMContentLoaded", function () {
+        function createFile() {
+          const dataSourceName =
+            document.getElementById("dataSourceName").value;
+          const userName = document.getElementById("userName").value;
+          const password = document.getElementById("password").value;
+          const connectionUrl = document.getElementById("connection-url").value;
+          const filename = `${dataSourceName}.properties`;
+          const content = `connector.name=${dataSourceName}\nconnection-url=${connectionUrl}\nconnection-user=${userName}\nconnection-password=${password}`;
+
+          fetch("/create-file", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ filename, content }),
+          })
+            .then((response) => response.text())
+            .then((message) => alert(message))
+            .catch((error) => console.error("Error:", error));
+        }
+
+        async function fetchDataSources() {
+          try {
+            const response = await fetch("/api/catalogs");
+            const data = await response.json();
+            const tableBody = document.getElementById("dataSourcesTableBody");
+            tableBody.innerHTML = "";
+
+            data.forEach((catalog) => {
+              const row = document.createElement("tr");
+              row.innerHTML = `
+                <td>${catalog.datasourcename + ".properties"}</td>
+                <td>${catalog.connectorname}</td>
+                <td>${catalog.connectorUrl}</td>
+                <td>${catalog.username}</td>
+                <td>
+                    <button class="btn delete-btn" title="Delete" data-filename="${
+                      catalog.datasourcename
+                    }.properties">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
+                    <button class="btn details-btn" data-filename="${
+                      catalog.datasourcename
+                    }.properties" title="Details">
+                        <i class="fas fa-info-circle"></i>
+                    </button>
+                    <button class="btn download-btn" title="Download" data-filename="${
+                      catalog.datasourcename
+                    }.properties">
+                        <i class="fas fa-download"></i>
+                    </button>
+                </td>
+              `;
+
+              // Add delete functionality
+              const deleteBtn = row.querySelector(".delete-btn");
+              deleteBtn.addEventListener("click", function () {
+                const filename = this.getAttribute("data-filename");
+                if (confirm(`Are you sure you want to delete ${filename}?`)) {
+                  fetch("/delete-file", {
+                    method: "DELETE",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ filename }),
+                  })
+                    .then((res) => res.text())
+                    .then((msg) => {
+                      alert(msg);
+                      fetchDataSources(); // Refresh table
+                    })
+                    .catch((err) => console.error(err));
+                }
+              });
+
+              // Add details functionality
+              const detailsBtn = row.querySelector(".details-btn");
+              detailsBtn.addEventListener("click", function () {
+                const filename = this.getAttribute("data-filename");
+                showDetails(filename);
+              });
+
+              // Add download functionality
+              const downloadBtn = row.querySelector(".download-btn");
+              downloadBtn.addEventListener("click", function () {
+                const filename = this.getAttribute("data-filename");
+                fetch(`/download-file?filename=${filename}`)
+                  .then((response) => response.blob())
+                  .then((blob) => {
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement("a");
+                    a.href = url;
+                    a.download = filename;
+                    document.body.appendChild(a);
+                    a.click();
+                    a.remove();
+                  })
+                  .catch((err) => alert("Failed to download file."));
+              });
+
+              tableBody.appendChild(row);
+            });
+          } catch (error) {
+            console.error("Error fetching Data Sources:", error);
+          }
+        }
+
+        fetchDataSources();
+
+        // Sidebar functionality
+        const openSidebarBtn = document.getElementById("openSidebarBtn");
+        const closeSidebarBtn = document.getElementById("closeSidebarBtn");
+        const sidebarForm = document.getElementById("sidebar-form");
+        const presto = document.getElementById("presto");
+
+        presto.addEventListener("click", startpresto);
+        function startpresto() {
+          fetch("/start-presto")
+            .then((response) => response.text())
+            .then((data) => alert(data))
+            .catch((error) => alert(error));
+        }
+
+        openSidebarBtn.addEventListener("click", function () {
+          sidebarForm.classList.add("open");
+        });
+
+        closeSidebarBtn.addEventListener("click", function () {
+          sidebarForm.classList.remove("open");
+        });
+
+        // Form submission handler
+        document
+          .getElementById("dataSourceForm")
+          .addEventListener("submit", function (e) {
+            e.preventDefault();
+            createFile();
+            sidebarForm.classList.remove("open");
+            e.target.reset();
+            fetchDataSources(); // Refresh the table after adding new data source
+          });
+
+        const closeXBtn = document.getElementById("closeXBtn");
+        closeXBtn.addEventListener("click", function () {
+          sidebarForm.classList.remove("open");
+        });
+      });
+    </script>
   </body>
 </html>

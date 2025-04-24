@@ -3,157 +3,106 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="../styles/styles2.css" />
-    <title>Presto Query</title>
+    <title>Presto Query Executor</title>
+    <link rel="stylesheet" href="style.css" />
+    <style>
+      .query-executor {
+        width: 80%;
+        margin: 40px auto;
+        text-align: center;
+      }
+
+      #query-input {
+        width: 100%;
+        padding: 10px;
+        font-size: 16px;
+      }
+
+      #execute-query {
+        margin-top: 10px;
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+      }
+
+      #query-results {
+        margin-top: 20px;
+        text-align: left;
+      }
+    </style>
   </head>
   <body>
-    <!-- Header -->
-    <header>
-      <div class="header-content">
-        <h1>DATA FUSION</h1>
-      </div>
-    </header>
-
-    <!-- Navigation Tabs -->
-    <nav class="tabs">
-      <a href="home">Home</a>
-      <a href="datasource">Data Sources</a>
-      <a href="access-links">Access Links</a>
-      <a href="logs">Logs</a>
-      <a href="#" class="active">Test Connection</a>
-    </nav>
-
-    <!-- Main Content -->
-    <main>
-      <!-- For Presto connection -->
-      <div class="query-section" style="text-align: center; margin-top: 20px">
-        <h2>Test Presto Connection</h2>
-        <input
-          type="text"
-          id="prestoQuery"
-          placeholder="Enter Presto Query"
-          style="width: 50%; padding: 10px; margin: 10px 0"
-        />
-        <button onclick="testPrestoConnection()" style="padding: 10px 20px">
-          Run Query
-        </button>
-        <p
-          id="connectionStatus"
-          style="margin-top: 20px; font-weight: bold"
-        ></p>
-        <div id="queryOutput" style="margin-top: 20px; text-align: left"></div>
-      </div>
-    </main>
+    <div class="query-executor">
+      <input
+        type="text"
+        id="query-input"
+        placeholder="Enter your Presto query"
+      />
+      <button id="execute-query">Execute Query</button>
+      <div id="query-results"></div>
+    </div>
 
     <script>
-      async function testPrestoConnection() {
-        const query = document.getElementById("prestoQuery").value;
-        const statusElement = document.getElementById("connectionStatus");
-        const outputElement = document.getElementById("queryOutput");
+      document
+        .getElementById("execute-query")
+        .addEventListener("click", function () {
+          const query = document.getElementById("query-input").value;
+          const resultsDiv = document.getElementById("query-results");
 
-        statusElement.textContent = "Connecting to Presto...";
-        outputElement.innerHTML = ""; // Clear previous output
+          // Clear previous results
+          resultsDiv.innerHTML = "";
 
-        if (!query.trim()) {
-          statusElement.textContent = "Please enter a query before running.";
-          return;
-        }
+          if (query) {
+            fetch("/execute-query", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ query: query }),
+            })
+              .then((response) => response.json())
+              .then((data) => {
+                // Assuming data is in the format { columns: [], rows: [] }
+                const columns = data.columns;
+                const rows = data.rows;
 
-        try {
-          const response = await fetch("http://localhost:3000/query-presto", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ query }),
-          });
+                // Create table
+                const table = document.createElement("table");
+                const thead = document.createElement("thead");
+                const tbody = document.createElement("tbody");
 
-          if (!response.ok) {
-            throw new Error(`Server responded with status: ${response.status}`);
-          }
+                // Create table headers
+                const headerRow = document.createElement("tr");
+                columns.forEach((column) => {
+                  const th = document.createElement("th");
+                  th.textContent = column;
+                  headerRow.appendChild(th);
+                });
+                thead.appendChild(headerRow);
+                table.appendChild(thead);
 
-          const result = await response.json();
+                // Create table rows
+                rows.forEach((row) => {
+                  const rowElement = document.createElement("tr");
+                  row.forEach((cell) => {
+                    const td = document.createElement("td");
+                    td.textContent = cell;
+                    rowElement.appendChild(td);
+                  });
+                  tbody.appendChild(rowElement);
+                });
+                table.appendChild(tbody);
 
-          if (result.success) {
-            const queryInfo = result.data;
-
-            // Check if there's a nextUri to fetch further results
-            if (queryInfo.nextUri) {
-              // Fetch the data from nextUri
-              const nextResponse = await fetch(queryInfo.nextUri);
-              const nextData = await nextResponse.json();
-
-              if (nextData.data && nextData.columns) {
-                handleQueryResult(nextData);
-              } else {
-                outputElement.textContent = "No results from the next URI.";
-              }
-            } else {
-              // Handle the current query result if no nextUri is provided
-              handleQueryResult(queryInfo);
-            }
+                resultsDiv.appendChild(table);
+              })
+              .catch((error) => {
+                resultsDiv.innerHTML =
+                  "Error executing query: " + error.message;
+              });
           } else {
-            statusElement.textContent =
-              "Query Failed: " + (result.error || "Unknown error");
+            resultsDiv.innerHTML = "Please enter a query.";
           }
-        } catch (ex) {
-          console.log(ex);
-          statusElement.textContent = "Error: " + ex.message;
-        }
-      }
-
-      function handleQueryResult(queryInfo) {
-        const outputElement = document.getElementById("queryOutput");
-
-        // Check if the result has data and columns
-        if (queryInfo.data && queryInfo.columns) {
-          displayQueryResult(queryInfo.columns, queryInfo.data);
-        } else {
-          outputElement.textContent = "No result set available.";
-        }
-      }
-
-      function displayQueryResult(columns, rows) {
-        const outputElement = document.getElementById("queryOutput");
-
-        // Create a table for displaying query results
-        const table = document.createElement("table");
-        table.style.width = "100%";
-        table.style.borderCollapse = "collapse";
-        table.style.marginTop = "20px";
-        table.style.border = "1px solid #ddd";
-
-        // Add table header
-        const thead = document.createElement("thead");
-        const headerRow = document.createElement("tr");
-        columns.forEach((column) => {
-          const th = document.createElement("th");
-          th.textContent = column;
-          th.style.border = "1px solid #ddd";
-          th.style.padding = "8px";
-          th.style.textAlign = "left";
-          th.style.backgroundColor = "#f2f2f2";
-          headerRow.appendChild(th);
         });
-        thead.appendChild(headerRow);
-        table.appendChild(thead);
-
-        // Add table body with rows
-        const tbody = document.createElement("tbody");
-        rows.forEach((row) => {
-          const tr = document.createElement("tr");
-          row.forEach((cell) => {
-            const td = document.createElement("td");
-            td.textContent = cell;
-            td.style.border = "1px solid #ddd";
-            td.style.padding = "8px";
-            tr.appendChild(td);
-          });
-          tbody.appendChild(tr);
-        });
-        table.appendChild(tbody);
-
-        // Append the table to the output element
-        outputElement.appendChild(table);
-      }
     </script>
   </body>
 </html>

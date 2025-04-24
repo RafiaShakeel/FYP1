@@ -3,31 +3,39 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Data Fusion Dashboard</title>
+    <link rel="icon" type="image/x-icon" href="../images/favicon2.png" />
     <link rel="stylesheet" href="../styles/styles2.css" />
   </head>
   <body>
-    <!-- Header -->
     <header>
       <div class="header-content">
-        <h1>DATA FUSION</h1>
+        <h1>Data Fusion</h1>
       </div>
     </header>
-
     <!-- Navigation Tabs -->
     <nav class="tabs">
       <a href="#" class="active">Home</a>
       <a href="datasource">Data Sources</a>
       <a href="access-links">Access Links</a>
       <a href="logs">Logs</a>
-      <a href="test-connection">Test Connection</a>
+      <a href="plugins">Plugins</a>
+      <!-- <a href="test-connection">Test Connection</a> -->
+      <button id="presto" class="presto-btn">Start presto</button>
+      <button id="logoutBtn" class="logout-btn">Logout</button>
     </nav>
-
-    <!-- Main Content -->
+    <div class="user-container">
+      <div>
+        <h2>Welcome, <span id="userName"></span>!</h2>
+        <p>Email: <span id="userEmail"></span></p>
+      </div>
+      <img id="userPicture" src="" alt="Profile Picture" width="100" />
+    </div>
     <main>
-      <!-- Top Section -->
-      <div class="top-section">
+      <!-- Virtual Databases and Data Sources Section -->
+      <section class="top-section">
         <div class="left-panel">
-          <h2>Virtual Databases</h2>
+          <h2>Access Link</h2>
           <table>
             <thead>
               <tr>
@@ -62,45 +70,27 @@
         </div>
         <div class="right-panel">
           <h2>Data Sources</h2>
-          <table>
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>petrelDS</td>
-                <td>ACTIVE</td>
-              </tr>
-              <tr>
-                <td>LSSE2E</td>
-                <td>ACTIVE</td>
-              </tr>
-              <tr>
-                <td>pg</td>
-                <td>ACTIVE</td>
-              </tr>
-              <tr>
-                <td>studio</td>
-                <td>ERROR: Could not connect to localhost</td>
-              </tr>
-              <tr>
-                <td>ExampleDS</td>
-                <td>ACTIVE</td>
-              </tr>
-              <tr>
-                <td>dsmonitor</td>
-                <td>ACTIVE</td>
-              </tr>
-            </tbody>
-          </table>
+          <!-- Data Sources Section -->
+          <div class="dataSources">
+            <table>
+              <thead>
+                <tr>
+                  <th>DataSource Name</th>
+                  <th>Connector Name</th>
+                  <th>Connection URL</th>
+                  <th>Username</th>
+                </tr>
+              </thead>
+              <tbody id="dataSourcesTableBody">
+                <!-- Dynamically populated rows -->
+              </tbody>
+            </table>
+          </div>
         </div>
-      </div>
+      </section>
 
-      <!-- Bottom Section -->
-      <div class="bottom-section">
+      <!-- Installed Plugins and Ports Section -->
+      <section class="bottom-section">
         <div class="left-panel">
           <h2>Installed Plugins</h2>
           <table>
@@ -108,32 +98,14 @@
               <tr>
                 <th>Name</th>
                 <th>Version</th>
-                <th>Access Links</th>
               </tr>
             </thead>
-            <tbody>
-              <tr>
-                <td>Code Examples</td>
-                <td>10ep.5.0</td>
-                <td>Code Viewer</td>
-              </tr>
-              <tr>
-                <td>DSIS Configuration Services</td>
-                <td>10ep.5.0</td>
-                <td>DSConfiguration API Playground</td>
-              </tr>
-              <tr>
-                <td>Data Service</td>
-                <td>10ep.5.0</td>
-                <td>Virtual Databases, API Playground</td>
-              </tr>
-              <tr>
-                <td>Data Transfer</td>
-                <td>14.5.5</td>
-                <td>Transfer Framework API</td>
-              </tr>
+            <tbody id="pluginsTableBody">
+              <!-- Dynamically populated rows -->
             </tbody>
           </table>
+          <br />
+          <div id="paginationControls"></div>
         </div>
         <div class="right-panel">
           <h2>Ports</h2>
@@ -164,7 +136,143 @@
             </tbody>
           </table>
         </div>
-      </div>
+      </section>
     </main>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // Fetch user details from session storage
+        const userName = sessionStorage.getItem("user_name");
+        const userEmail = sessionStorage.getItem("user_email");
+        const userPicture = sessionStorage.getItem("user_picture");
+
+        if (!userName || !userEmail) {
+          window.location.href = "sign-in"; // Redirect if not logged in
+        }
+
+        document.getElementById("userName").textContent = userName;
+        document.getElementById("userEmail").textContent = userEmail;
+        document.getElementById("userPicture").src = userPicture;
+
+        // Logout functionality
+        document
+          .getElementById("logoutBtn")
+          .addEventListener("click", function () {
+            sessionStorage.clear();
+            window.location.href = "sign-in";
+          });
+        document
+          .getElementById("presto")
+          .addEventListener("click", startpresto);
+        function startpresto() {
+          fetch("/start-presto")
+            .then((response) => response.text())
+            .then((data) => alert(data))
+            .catch((error) => alert(error));
+        }
+        // Fetch Data Sources
+        async function fetchDataSources() {
+          try {
+            const response = await fetch("/api/catalogs"); // Backend API URL
+            const data = await response.json();
+            const tableBody = document.getElementById("dataSourcesTableBody");
+            tableBody.innerHTML = ""; // Clear table before adding new rows
+
+            data.forEach((catalog) => {
+              const row = document.createElement("tr");
+              row.innerHTML = `
+                <td>${catalog.datasourcename + ".properties"}</td>
+                <td>${catalog.connectorname}</td>
+                <td>${catalog.connectorUrl}</td>
+                <td>${catalog.username}</td>
+                
+              `;
+              tableBody.appendChild(row);
+            });
+          } catch (error) {
+            console.error("Error fetching Data Sources:", error);
+          }
+        }
+
+        let currentPage = 1;
+        const rowsPerPage = 5;
+        let pluginsData = [];
+
+        async function fetchInstalledPlugins() {
+          try {
+            const response = await fetch("/api/plugins");
+            pluginsData = await response.json();
+            currentPage = 1; // Reset to first page
+            renderTable();
+          } catch (error) {
+            console.error("Error fetching installed plugins:", error);
+          }
+        }
+
+        function renderTable() {
+          const tableBody = document.getElementById("pluginsTableBody");
+          tableBody.innerHTML = "";
+
+          const startIndex = (currentPage - 1) * rowsPerPage;
+          const endIndex = startIndex + rowsPerPage;
+
+          const paginatedData = pluginsData.slice(startIndex, endIndex);
+
+          paginatedData.forEach((plugin) => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+      <td>${plugin.pluginName}</td>
+      <td>${plugin.version || "N/A"}</td>
+    `;
+            tableBody.appendChild(row);
+          });
+
+          renderPaginationControls();
+        }
+
+        function renderPaginationControls() {
+          const paginationDiv = document.getElementById("paginationControls");
+          paginationDiv.innerHTML = "";
+
+          const totalPages = Math.ceil(pluginsData.length / rowsPerPage);
+
+          if (totalPages === 0) return; // No pagination if no data
+
+          const prevButton = document.createElement("button");
+          prevButton.innerHTML = "&#9664;"; // Left arrow
+          prevButton.disabled = currentPage === 1;
+          prevButton.className = "pagination-button";
+          prevButton.addEventListener("click", () => changePage(-1));
+
+          const nextButton = document.createElement("button");
+          nextButton.innerHTML = "&#9654;"; // Right arrow
+          nextButton.disabled = currentPage >= totalPages;
+          nextButton.className = "pagination-button";
+          nextButton.addEventListener("click", () => changePage(1));
+
+          const pageInfo = document.createElement("span");
+          pageInfo.textContent = `Page ${currentPage} of ${totalPages}`;
+          pageInfo.className = "pagination-info";
+
+          paginationDiv.appendChild(prevButton);
+          paginationDiv.appendChild(pageInfo);
+          paginationDiv.appendChild(nextButton);
+        }
+
+        function changePage(direction) {
+          const totalPages = Math.ceil(pluginsData.length / rowsPerPage);
+          currentPage += direction;
+
+          if (currentPage < 1) currentPage = 1;
+          if (currentPage > totalPages) currentPage = totalPages;
+
+          renderTable();
+        }
+
+        // Fetch data when page loads
+        fetchDataSources();
+        fetchInstalledPlugins();
+      });
+    </script>
   </body>
 </html>

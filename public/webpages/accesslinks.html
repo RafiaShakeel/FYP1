@@ -3,7 +3,100 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Data Fusion</title>
+    <link rel="icon" type="image/x-icon" href="../images/favicon2.png" />
     <link rel="stylesheet" href="../styles/styles2.css" />
+    <style>
+      /* Right-Aligned Add Button */
+      .add-vdb-btn-sidebar {
+        background-color: #005f8a;
+        color: white;
+        padding: 8px 16px;
+        margin-right: 1%;
+        margin-top: 1%;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        position: absolute;
+        right: 20px;
+        top: 0;
+      }
+      .add-vdb-btn,
+      .cancel-btn {
+        background-color: #005f8a;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        margin: 0 5px;
+        cursor: pointer;
+        border-radius: 4px;
+        transition: background-color 0.3s ease;
+      }
+      .add-vdb-btn {
+        margin-left: 38%;
+      }
+      /* Slide-in Sidebar */
+      .sidebar-form {
+        position: fixed;
+        top: 0;
+        right: -40%;
+        width: 35%;
+        height: 100%;
+        background-color: #ecf1f4;
+        box-shadow: -3px 0 5px rgba(0, 0, 0, 0.2);
+        transition: right 0.3s ease;
+        padding: 16px;
+        z-index: 10;
+      }
+
+      .sidebar-form.open {
+        right: 0;
+      }
+
+      .sidebar-form h3 {
+        margin-top: 0;
+      }
+
+      .sidebar-form label {
+        display: block;
+        margin-top: 10px;
+      }
+
+      .sidebar-form input {
+        width: 97%;
+        padding: 8px;
+        margin-top: 4px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+      }
+
+      .sidebar-form button {
+        margin-top: 12px;
+        background-color: #005f8a;
+        color: white;
+        border: none;
+        padding: 8px 12px;
+        border-radius: 4px;
+        cursor: pointer;
+        align-content: center;
+      }
+
+      .sidebar-header {
+        padding-left: 10px;
+        padding-right: 10px;
+        display: flex;
+        gap: 10%;
+        align-items: baseline;
+        justify-content: space-between;
+        border: 1px solid;
+        border-color: #005f8a;
+        background-color: #d7e2f6;
+      }
+
+      .content-container {
+        position: relative;
+      }
+    </style>
   </head>
   <body>
     <!-- Header -->
@@ -19,74 +112,42 @@
       <a href="datasource">Data Sources</a>
       <a href="#" class="active">Access Links</a>
       <a href="logs">Logs</a>
-      <a href="test-connection">Test Connection</a>
+      <a href="plugins">Plugins</a>
+      <button id="presto" class="presto-btn">Start presto</button>
+      <button id="logoutBtn" class="logout-btn">Logout</button>
     </nav>
 
     <!-- Main Content -->
     <main>
-      <section class="content">
+      <section class="content content-container">
+        <!-- Add Virtual Database Button -->
+        <button class="add-vdb-btn-sidebar" id="openSidebarBtn">
+          Add Virtual Database
+        </button>
+
         <!-- Virtual Databases Section -->
         <div class="virtual-databases">
           <h2>Access Links</h2>
           <table>
             <thead>
               <tr>
-                <th>VDB Name</th>
-                <th>Version</th>
-                <th>Teiid JDBC URL</th>
-                <th>Dynamic</th>
-                <th>Status</th>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>URLs</th>
                 <th>Actions</th>
               </tr>
             </thead>
             <tbody>
-              <!-- Example Row -->
+              <!-- Example Rows -->
               <tr>
                 <td>DSDataTransfer</td>
                 <td>1</td>
                 <td>jdbc:teiid:DSDataTransfer@mm...</td>
                 <td>true</td>
-                <td>ACTIVE</td>
                 <td>
                   <a href="#">Delete</a> | <a href="#">Details</a> |
-                  <a href="#">Download</a> |
-                  <a href="#">Undeploy</a>
-                </td>
-              </tr>
-              <tr>
-                <td>OpenWorks_LSSE2E_SingleSource</td>
-                <td>5000.10.7</td>
-                <td>jdbc:teiid:OpenWorks_LSSE2E_SingleSource@mm...</td>
-                <td>true</td>
-                <td>ACTIVE</td>
-                <td>
-                  <a href="#">Delete</a> | <a href="#">Details</a> |
-                  <a href="#">Download</a> |
-                  <a href="#">Undeploy</a>
-                </td>
-              </tr>
-              <tr>
-                <td>OpenWorksCommonModel_LSSE2E</td>
-                <td>5000.10.7</td>
-                <td>jdbc:teiid:OpenWorksCommonModel_LSSE2E@mm...</td>
-                <td>false</td>
-                <td>ACTIVE</td>
-                <td>
-                  <a href="#">Delete</a> | <a href="#">Details</a> |
-                  <a href="#">Download</a> |
-                  <a href="#">Undeploy</a>
-                </td>
-              </tr>
-              <tr>
-                <td>pg_pg</td>
-                <td>1</td>
-                <td>jdbc:teiid:pg_pg@mm...</td>
-                <td>true</td>
-                <td>ACTIVE</td>
-                <td>
-                  <a href="#">Delete</a> | <a href="#">Details</a> |
-                  <a href="#">Download</a> |
-                  <a href="#">Undeploy</a>
+                  <a href="#">Download</a> | <a href="#">Undeploy</a>
                 </td>
               </tr>
             </tbody>
@@ -94,5 +155,110 @@
         </div>
       </section>
     </main>
+
+    <!-- Sidebar Form -->
+    <div class="sidebar-form" id="sidebarForm">
+      <div class="sidebar-header">
+        <h3>Add Access Links</h3>
+        <button class="close-x-btn" id="closeXBtn">&times;</button>
+      </div>
+      <form id="vdbForm">
+        <label for="vdbName">Access-link Name:</label>
+        <input type="text" id="vdbName" name="vdbName" required />
+
+        <label for="vdbVersion">Version:</label>
+        <input type="text" id="vdbVersion" name="vdbVersion" required />
+
+        <label for="jdbcUrl">JDBC URL:</label>
+        <input type="text" id="jdbcUrl" name="jdbcUrl" required />
+
+        <label for="dynamic">Dynamic (true/false):</label>
+        <input type="text" id="dynamic" name="dynamic" required />
+
+        <label for="status">Status:</label>
+        <input type="text" id="status" name="status" required />
+
+        <div class="form-buttons">
+          <button type="submit" class="add-vdb-btn">Add VDB</button>
+          <button type="button" class="cancel-btn" id="closeSidebarBtn">
+            Cancel
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // Session validation
+        const userName = sessionStorage.getItem("user_name");
+        const userEmail = sessionStorage.getItem("user_email");
+
+        if (!userName || !userEmail) {
+          window.location.href = "sign-in";
+        }
+
+        // Logout handler
+        document
+          .getElementById("logoutBtn")
+          .addEventListener("click", function () {
+            sessionStorage.clear();
+            window.location.href = "sign-in";
+          });
+
+        // Sidebar functionality
+        const openSidebarBtn = document.getElementById("openSidebarBtn");
+        const closeSidebarBtn = document.getElementById("closeSidebarBtn");
+        const sidebarForm = document.getElementById("sidebarForm");
+        const presto = document.getElementById("presto");
+
+        presto.addEventListener("click", startpresto);
+        function startpresto() {
+          fetch("/start-presto")
+            .then((response) => response.text())
+            .then((data) => alert(data))
+            .catch((error) => alert(error));
+        }
+
+        openSidebarBtn.addEventListener("click", function () {
+          sidebarForm.classList.add("open");
+        });
+
+        closeSidebarBtn.addEventListener("click", function () {
+          sidebarForm.classList.remove("open");
+        });
+
+        // Example submit handler
+        document
+          .getElementById("vdbForm")
+          .addEventListener("submit", function (e) {
+            e.preventDefault();
+            const vdbName = document.getElementById("vdbName").value;
+            const vdbVersion = document.getElementById("vdbVersion").value;
+            const jdbcUrl = document.getElementById("jdbcUrl").value;
+            const dynamic = document.getElementById("dynamic").value;
+            const status = document.getElementById("status").value;
+
+            console.log({
+              vdbName,
+              vdbVersion,
+              jdbcUrl,
+              dynamic,
+              status,
+            });
+
+            alert("VDB Added Successfully!");
+
+            // Close sidebar after adding
+            sidebarForm.classList.remove("open");
+
+            // Reset form
+            e.target.reset();
+          });
+        const closeXBtn = document.getElementById("closeXBtn");
+        closeXBtn.addEventListener("click", function () {
+          sidebarForm.classList.remove("open");
+        });
+      });
+    </script>
   </body>
 </html>

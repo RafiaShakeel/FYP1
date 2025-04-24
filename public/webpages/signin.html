@@ -3,21 +3,26 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Sign In</title>
+    <title>Data Fusion</title>
     <link rel="stylesheet" href="../styles/styles.css" />
+    <link rel="icon" type="image/x-icon" href="../images/favicon2.png" />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+      rel="stylesheet"
+    />
     <!-- Load the Google API Client Library -->
     <script src="https://accounts.google.com/gsi/client" async defer></script>
   </head>
   <body>
     <nav>
-      <div class="logo"><a href="index.html">Data Fusion</a></div>
+      <div class="logo"><a href="index">Data Fusion</a></div>
       <ul>
-        <li><a href="#team">Team</a></li>
-        <li><a href="#about">About Us</a></li>
+        <li><a href="team">Team</a></li>
+        <li><a href="about-us">About Us</a></li>
         <li><a href="sign-in">Sign In</a></li>
-        <li><a href="sign-up">Sign Up</a></li>
       </ul>
     </nav>
+
     <div class="parentcontainer">
       <div class="container">
         <div class="logo-section">
@@ -27,15 +32,17 @@
             seamlessly.
           </p>
         </div>
-        <div class="form-container">
-          <h2>Sign In</h2>
-          <form id="signInForm">
+        <div>
+          <div class="form-parent"><h2>Sign In</h2></div>
+          <div class="form-container">
+            <!-- <form id="signInForm">
             <label for="email">Email:</label>
             <input
               type="email"
               id="email"
               name="email"
               placeholder="Your Email"
+              required
             />
             <label for="password">Password:</label>
             <input
@@ -43,105 +50,115 @@
               id="password"
               name="password"
               placeholder="Your Password"
+              required
             />
             <button type="submit">Sign In</button>
-          </form>
-          <!-- Google Login Button -->
-          <button id="loginButton">Login with Google</button>
-          <div id="userInfo"></div>
+          </form> -->
+
+            <!-- Google Login Button -->
+
+            <div
+              id="g_id_onload"
+              data-client_id="385006182436-lhpqj494m9snj1ifla9lguc59lnjcmcq.apps.googleusercontent.com"
+              data-context="signin"
+              data-ux_mode="popup"
+              data-callback="handleCredentialResponse"
+              data-auto_prompt="false"
+            ></div>
+            <div class="g_id_signin" data-type="standard"></div>
+          </div>
         </div>
       </div>
     </div>
+    <footer class="footer">
+      <div class="footer-top">
+        <h2>
+          What's next:<br />
+          Gain real-time insights from your data;<br />
+          begin your digital transformation today!
+        </h2>
+        <button onclick="location.href='#SignIn'">Sign In Now</button>
+      </div>
+      <div class="footer-content">
+        <div class="footer-column">
+          <h3>Data Fusion</h3>
+          <p>
+            Data Fusion is a powerful data federated system designed to simplify
+            data management. It allows organizations to access and deliver data
+            in a unified way, making it easier to support various business needs
+            quickly and efficiently. By improving data integration and
+            accessibility, systems like Data Fusion can provide significant
+            value to organizations, helping them achieve better results and
+            faster returns on their data-related investments.
+          </p>
+        </div>
+        <div class="footer-column" style="padding-left: 100px">
+          <h3>Links</h3>
+          <ul>
+            <li><a href="about-us">About Us</a></li>
+          </ul>
+        </div>
+        <div class="footer-column footer-contact">
+          <h3>Contact</h3>
+          <p>📞 (+92) 335 537 1478</p>
+          <p>📧 info@fuse_data.com</p>
+          <p>📍 Islamabad , Punjab , Pakistan</p>
+          <div class="footer-social">
+            <a
+              href="https://www.linkedin.com/company/lmkr/posts/?feedView=all"
+              target="_blank"
+              aria-label="LinkedIn"
+              ><i class="fab fa-linkedin-in"></i
+            ></a>
+            <a
+              href="https://www.youtube.com/@GVERSEGGX"
+              target="_blank"
+              aria-label="YouTube"
+              ><i class="fab fa-youtube"></i
+            ></a>
+            <a
+              href="https://www.instagram.com/discoverlmkr/"
+              target="_blank"
+              aria-label="Instagram"
+              ><i class="fab fa-instagram"></i
+            ></a>
+            <a
+              href="https://www.facebook.com/lmkrnews/photos/"
+              target="_blank"
+              aria-label="Facebook"
+              ><i class="fab fa-facebook-f"></i
+            ></a>
+          </div>
+        </div>
+      </div>
+    </footer>
+    <footer class="endfooter">
+      <div class="endfooter-content">
+        <p>Copyrights © 2025 Data fusion</p>
+        <ul class="endfooter-links">
+          <li><a href="terms-of-use">Terms of Use</a></li>
+          <li><a href="privacy-policy">Privacy & Cookies Policy</a></li>
+          <li><a href="security">Security</a></li>
+          <li>
+            <a href="https://maps.app.goo.gl/1zSjsQGiQwXX7bdS7">Offices</a>
+          </li>
+        </ul>
+      </div>
+    </footer>
+
     <script>
-      // Google OAuth Configuration
-      const clientId =
-        "385006182436-lhpqj494m9snj1ifla9lguc59lnjcmcq.apps.googleusercontent.com";
-      const redirectUri = "http://localhost:3000/home/"; // Replace with your redirect URI
-      const authEndpoint = "https://accounts.google.com/o/oauth2/v2/auth";
-      const tokenEndpoint = "https://oauth2.googleapis.com/token";
+      function handleCredentialResponse(response) {
+        // Decode JWT token to get user info
+        const data = JSON.parse(atob(response.credential.split(".")[1]));
+        console.log("User Info:", data);
 
-      // Add event listener to "Login with Google" button
-      document
-        .getElementById("loginButton")
-        .addEventListener("click", async (e) => {
-          e.preventDefault(); // Prevent default form submission
+        // Store user details in session storage
+        sessionStorage.setItem("user_name", data.name);
+        sessionStorage.setItem("user_email", data.email);
+        sessionStorage.setItem("user_picture", data.picture);
 
-          const codeVerifier = generateCodeVerifier();
-          const codeChallenge = await generateCodeChallenge(codeVerifier);
-
-          // Save the code verifier in local storage for later use
-          localStorage.setItem("code_verifier", codeVerifier);
-
-          // Construct the Google OAuth URL
-          const authUrl = `${authEndpoint}?response_type=code&client_id=${clientId}&redirect_uri=${encodeURIComponent(
-            redirectUri
-          )}&scope=email%20profile&code_challenge=${codeChallenge}&code_challenge_method=S256`;
-
-          // Redirect the user to Google's OAuth endpoint
-          window.location.href = authUrl;
-        });
-
-      // Check if redirected back with an authorization code
-      const params = new URLSearchParams(window.location.search);
-      if (params.has("code")) {
-        const code = params.get("code");
-        const codeVerifier = localStorage.getItem("code_verifier");
-
-        // Exchange the authorization code for tokens
-        exchangeCodeForToken(code, codeVerifier);
-      }
-
-      // Generate a random code verifier
-      function generateCodeVerifier() {
-        const array = new Uint8Array(56);
-        window.crypto.getRandomValues(array);
-        return btoa(String.fromCharCode(...array))
-          .replace(/\+/g, "-")
-          .replace(/\//g, "_")
-          .replace(/=+$/, "");
-      }
-
-      // Generate a code challenge based on the code verifier
-      async function generateCodeChallenge(verifier) {
-        const encoder = new TextEncoder();
-        const data = encoder.encode(verifier);
-        const hash = await crypto.subtle.digest("SHA-256", data);
-
-        return btoa(String.fromCharCode(...new Uint8Array(hash)))
-          .replace(/\+/g, "-")
-          .replace(/\//g, "_")
-          .replace(/=+$/, "");
-      }
-
-      // Exchange the authorization code for access and ID tokens
-      async function exchangeCodeForToken(code, codeVerifier) {
-        try {
-          const response = await fetch(tokenEndpoint, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/x-www-form-urlencoded",
-            },
-            body: new URLSearchParams({
-              code: code,
-              client_id: clientId,
-              redirect_uri: redirectUri,
-              grant_type: "authorization_code",
-              code_verifier: codeVerifier,
-            }),
-          });
-
-          if (!response.ok) {
-            throw new Error("Token exchange failed");
-          }
-
-          const data = await response.json();
-          console.log("ID Token:", data.id_token); // Log the ID token to the console
-
-          // Redirect the user to index2.html
-          window.location.href = "http://localhost:3000/home/"; // Manually use the full path
-        } catch (error) {
-          console.error("Error exchanging code for token:", error);
-        }
+        // Redirect to dashboard
+        window.location.href = "home";
       }
     </script>
   </body>
